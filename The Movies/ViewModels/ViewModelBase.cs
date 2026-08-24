@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace TheMovies.ViewModels
+namespace The_Movies.ViewModels
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {

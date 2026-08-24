@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace TheMovies.ViewModels
+namespace The_Movies.ViewModels
 {
     public class RelayCommand : ICommand
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
-using TheMovies.ViewModels;
+
 
 namespace The_Movies.ViewModels
 {
