@@ -17,6 +17,7 @@
         <TextBlock Text="Genre"/>
         <ComboBox ItemsSource="{Binding GenreValues}" SelectedItem="{Binding Genre}" Margin="0,0,0,20"/>
 
-        <Button Content="Gem" Width="150" Height="35" Command="{Binding SaveCommand}"/>
+        <Button Content="Gem" Width="150" Height="35" Command="{Binding SaveCommand}" Margin="0,0,0,10"/>
+        <Button Content="Tilbage" Width="150" Height="35" Command="{Binding BackCommand}"/>
     </StackPanel>
 </UserControl>

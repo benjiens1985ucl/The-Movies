@@ -20,7 +20,7 @@ namespace The_Movies.ViewModels
         private void RegisterMovie()
         {
             System.Diagnostics.Debug.WriteLine("RegisterMovie blev kaldt!");
-            _mainWindowViewModel.CurrentView = new RegisterMovieViewModel();
+            _mainWindowViewModel.CurrentView = new RegisterMovieViewModel(_mainWindowViewModel);
         }
 
         private void ShowMovieList()
