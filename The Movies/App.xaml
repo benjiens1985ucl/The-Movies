@@ -9,5 +9,8 @@
         <DataTemplate DataType="{x:Type vm:MainMenuViewModel}">
             <views:MainMenuView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RegisterMovieViewModel}">
+            <views:RegisterMovieView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

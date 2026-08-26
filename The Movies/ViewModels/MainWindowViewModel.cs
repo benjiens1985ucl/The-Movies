@@ -11,7 +11,7 @@
 
         public MainWindowViewModel()
         {
-            CurrentView = new MainMenuViewModel();
+            CurrentView = new MainMenuViewModel(this);
         }
     }
 }

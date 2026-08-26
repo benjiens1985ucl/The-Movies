@@ -1,30 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
-
+﻿using System.Windows.Input;
 
 namespace The_Movies.ViewModels
 {
     public class MainMenuViewModel : ViewModelBase
     {
+        private readonly MainWindowViewModel _mainWindowViewModel;
+
         public ICommand RegisterMovieCommand { get; }
         public ICommand ShowMovieListCommand { get; }
 
-        public MainMenuViewModel()
+        public MainMenuViewModel(MainWindowViewModel mainWindowViewModel)
         {
+            _mainWindowViewModel = mainWindowViewModel;
+
             RegisterMovieCommand = new RelayCommand(_ => RegisterMovie());
             ShowMovieListCommand = new RelayCommand(_ => ShowMovieList());
         }
 
         private void RegisterMovie()
         {
-            // Skal senere skifte "aktiv side" til registreringsformularen
+            System.Diagnostics.Debug.WriteLine("RegisterMovie blev kaldt!");
+            _mainWindowViewModel.CurrentView = new RegisterMovieViewModel();
         }
 
         private void ShowMovieList()
         {
-            // Skal senere skifte "aktiv side" til filmoversigten
+            // Kommer i en senere task (filmoversigt)
         }
     }
 }
