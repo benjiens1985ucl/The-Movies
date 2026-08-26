@@ -13,7 +13,9 @@ namespace The_Movies.ViewModels
 
         private bool CanSave(object? parameter)
         {
-            return !string.IsNullOrWhiteSpace(Title) && Duration > 0;
+            return !string.IsNullOrWhiteSpace(Title)
+                && int.TryParse(Duration, out int duration)
+                && duration > 0;
         }
 
         private string _title = string.Empty;
@@ -23,8 +25,8 @@ namespace The_Movies.ViewModels
             set => SetProperty(ref _title, value);
         }
 
-        private int _duration;
-        public int Duration
+        private string _duration = string.Empty;
+        public string Duration
         {
             get => _duration;
             set => SetProperty(ref _duration, value);
@@ -55,7 +57,7 @@ namespace The_Movies.ViewModels
             var movie = new Movie
             {
                 Title = Title,
-                Duration = Duration,
+                Duration = int.Parse(Duration),
                 Genre = Genre
             };
 
