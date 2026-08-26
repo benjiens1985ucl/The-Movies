@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using The_Movies.Models;
+using The_Movies.Services;
 
 namespace The_Movies.ViewModels
 {
     public class RegisterMovieViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
+        private readonly MovieRepository _movieRepository = new MovieRepository();
+
         private bool CanSave(object? parameter)
         {
             return !string.IsNullOrWhiteSpace(Title) && Duration > 0;
@@ -56,8 +59,11 @@ namespace The_Movies.ViewModels
                 Genre = Genre
             };
 
-            
-            // TODO: gem filmen permanent (kommer i SCRUM-23/24/25 med MovieRepository)
+            var movies = _movieRepository.LoadAll();
+            movies.Add(movie);
+            _movieRepository.Save(movies);
+
+            _mainWindowViewModel.CurrentView = new MainMenuViewModel(_mainWindowViewModel);
         }
 
         private void Back()
