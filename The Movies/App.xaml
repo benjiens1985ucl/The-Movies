@@ -12,5 +12,8 @@
         <DataTemplate DataType="{x:Type vm:RegisterMovieViewModel}">
             <views:RegisterMovieView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:MovieListViewModel}">
+            <views:MovieListView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

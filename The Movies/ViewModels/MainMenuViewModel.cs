@@ -25,7 +25,7 @@ namespace The_Movies.ViewModels
 
         private void ShowMovieList()
         {
-            // Kommer i en senere task (filmoversigt)
+            _mainWindowViewModel.CurrentView = new MovieListViewModel(_mainWindowViewModel);
         }
     }
 }
