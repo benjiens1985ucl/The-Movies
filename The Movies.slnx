@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="The Movies/The Movies.csproj" />
+  <Project Path="TheMovies.Tests/TheMovies.Tests.csproj" Id="d0d4e1e3-3703-4058-ac63-1ab0a62b8e9a" />
 </Solution>
