@@ -8,7 +8,7 @@
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
         <TextBlock Text="The Movies" FontSize="32" FontWeight="Bold" Margin="0,0,0,30" HorizontalAlignment="Center"/>
         <Button Content="Registrer film" Command="{Binding RegisterMovieCommand}" Width="200" Height="40" Margin="0,0,0,10"/>
-        <Button Content="Vis film" Command="{Binding ShowMovieListCommand}" Width="200" Height="40"/>
+        <Button Content="Vis film" Command="{Binding ShowMovieListCommand}" Width="200" Height="40" Margin="0,0,0,10"/>
         <Button Content="Lav program" Command="{Binding ShowProgramCommand}" Width="200" Height="40"/>
     </StackPanel>
 </UserControl>
