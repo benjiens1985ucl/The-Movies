@@ -8,6 +8,7 @@ namespace The_Movies.ViewModels
 
         public ICommand RegisterMovieCommand { get; }
         public ICommand ShowMovieListCommand { get; }
+        public ICommand ShowProgramCommand { get; }
 
         public MainMenuViewModel(MainWindowViewModel mainWindowViewModel)
         {
@@ -15,6 +16,7 @@ namespace The_Movies.ViewModels
 
             RegisterMovieCommand = new RelayCommand(_ => RegisterMovie());
             ShowMovieListCommand = new RelayCommand(_ => ShowMovieList());
+            ShowProgramCommand = new RelayCommand(_ => ShowProgram());
         }
 
         private void RegisterMovie()
@@ -26,6 +28,10 @@ namespace The_Movies.ViewModels
         private void ShowMovieList()
         {
             _mainWindowViewModel.CurrentView = new MovieListViewModel(_mainWindowViewModel);
+        }
+        private void ShowProgram()
+        {
+            _mainWindowViewModel.CurrentView = new ProgramViewModel(_mainWindowViewModel);
         }
     }
 }
