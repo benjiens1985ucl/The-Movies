@@ -17,6 +17,9 @@ namespace The_Movies.ViewModels
         public ObservableCollection<Movie> Movies { get; }
         public ObservableCollection<Hall> AvailableHalls { get; } = new ObservableCollection<Hall>();
 
+        public ObservableCollection<string> AvailableStartTimes { get; }
+
+
         private Cinema? _selectedCinema;
         public Cinema? SelectedCinema
         {
@@ -44,11 +47,18 @@ namespace The_Movies.ViewModels
             set => SetProperty(ref _selectedMovie, value);
         }
 
-        private DateTime _selectedDateTime = DateTime.Now;
-        public DateTime SelectedDateTime
+        private DateTime? _selectedDate = DateTime.Today;
+        public DateTime? SelectedDate
         {
-            get => _selectedDateTime;
-            set => SetProperty(ref _selectedDateTime, value);
+            get => _selectedDate;
+            set => SetProperty(ref _selectedDate, value);
+        }
+
+        private string? _selectedStartTime;
+        public string? SelectedStartTime
+        {
+            get => _selectedStartTime;
+            set => SetProperty(ref _selectedStartTime, value);
         }
 
         private bool _isPremiere;
@@ -67,6 +77,16 @@ namespace The_Movies.ViewModels
 
             Cinemas = new ObservableCollection<Cinema>(_cinemaRepository.LoadAll());
             Movies = new ObservableCollection<Movie>(_movieRepository.LoadAll());
+
+            AvailableStartTimes = new ObservableCollection<string>();
+            for (int hour = 0; hour <24; hour++)
+            {
+                for (int minute = 0; minute < 60; minute += 15)
+                {
+                    AvailableStartTimes.Add(
+                        $"{hour:00}:{minute:00}");
+                }
+            }
 
             SaveCommand = new RelayCommand(_ => Save(), CanSave);
             BackCommand = new RelayCommand(_ => Back());
@@ -92,16 +112,24 @@ namespace The_Movies.ViewModels
         {
             return SelectedCinema != null
                 && SelectedHall != null
-                && SelectedMovie != null;
+                && SelectedMovie != null
+                && SelectedDate != null
+                && SelectedStartTime != null;
         }
 
         private void Save()
         {
+            TimeSpan startTime =
+                TimeSpan.Parse(SelectedStartTime!);
+
+            DateTime screeningDateTime =
+                SelectedDate!.Value.Date.Add(startTime);
+            
             var screening = new Screening
             {
                 Movie = SelectedMovie!,
                 Hall = SelectedHall!,
-                DateTime = SelectedDateTime,
+                DateTime = screeningDateTime,
                 IsPremiere = IsPremiere
             };
 

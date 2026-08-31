@@ -17,8 +17,14 @@
         <TextBlock Text="Film"/>
         <ComboBox ItemsSource="{Binding Movies}" DisplayMemberPath="Title" SelectedItem="{Binding SelectedMovie}" Margin="0,0,0,10"/>
 
-        <TextBlock Text="Dato og tid"/>
-        <DatePicker SelectedDate="{Binding SelectedDateTime}" Margin="0,0,0,10"/>
+        <TextBlock Text="Dato"/>
+        <DatePicker SelectedDate="{Binding SelectedDateTime}" 
+                    Margin="0,0,0,10"/>
+
+        <TextBlock Text="Starttid"/>
+        <ComboBox ItemsSource="{Binding AvailableStartTimes}"
+                  SelectedItem="{Binding SelectedStartTime}"
+                  Margin="0,0,0,10"/>
 
         <CheckBox Content="Premiere" IsChecked="{Binding IsPremiere}" Margin="0,0,0,20"/>
 
