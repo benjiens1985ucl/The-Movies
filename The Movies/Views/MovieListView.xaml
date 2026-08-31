@@ -8,7 +8,10 @@
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="500">
         <TextBlock Text="Film" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
 
-        <ListView ItemsSource="{Binding Movies}" Height="300" Margin="0,0,0,20">
+        <ListView ItemsSource="{Binding Movies}" 
+                  SelectedItem="{Binding SelectedMovie}"
+                  Height="300" 
+                  Margin="0,0,0,20">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Titel" DisplayMemberBinding="{Binding Title}" Width="200"/>
@@ -17,7 +20,21 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center">
 
-        <Button Content="Tilbage" Width="150" Height="35" Command="{Binding BackCommand}" HorizontalAlignment="Center"/>
+            <Button Content="Slet Film"
+                Width="150"
+                Height="35"
+                Margin="0,0,10,0"
+                Command="{Binding DeleteMovieCommand}"/>
+            <Button Content="Tilbage" 
+                Width="150" 
+                Height="35" 
+                Command="{Binding BackCommand}" 
+                HorizontalAlignment="Center"/>
+
+        </StackPanel>
     </StackPanel>
+        
 </UserControl>
