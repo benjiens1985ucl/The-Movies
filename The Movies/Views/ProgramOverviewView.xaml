@@ -10,6 +10,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -19,9 +20,46 @@
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
                    Margin="0,0,0,20"/>
+        <WrapPanel Margin="0,0,0,15">
 
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Screenings}"
+            <StackPanel Margin="0,0,15,10">
+                <TextBlock Text="Biograf"/>
+                <ComboBox ItemsSource="{Binding CinemaFilters}"
+                          SelectedItem="{Binding SelectedCinemaFilter}"
+                          Width="140"/>
+            </StackPanel>
+
+            <StackPanel Margin="0,0,15,10">
+                <TextBlock Text="Film"/>
+                <ComboBox ItemsSource="{Binding MovieFilters}"
+              SelectedItem="{Binding SelectedMovieFilter}"
+              Width="140"/>
+            </StackPanel>
+
+            <StackPanel Margin="0,0,15,10">
+                <TextBlock Text="Genre"/>
+                <ComboBox ItemsSource="{Binding GenreFilters}"
+              SelectedItem="{Binding SelectedGenreFilter}"
+              Width="100"/>
+            </StackPanel>
+
+            <StackPanel Margin="0,0,15,10">
+                <TextBlock Text="Periode"/>
+                <ComboBox ItemsSource="{Binding PeriodFilters}"
+                  SelectedItem="{Binding SelectedPeriodFilter}"
+                  Width="100"/>
+            </StackPanel>
+
+            <StackPanel Margin="0,0,15,10">
+                <TextBlock Text="Dato"/>
+                <DatePicker SelectedDate="{Binding SelectedFilterDate}"
+                            Width="130"/>
+            </StackPanel>
+
+        </WrapPanel>
+        
+            <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding FilteredScreenings}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   CanUserAddRows="False"
