@@ -9,16 +9,15 @@ namespace The_Movies.ViewModels
     public class ProgramViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
-        private readonly CinemaRepository _cinemaRepository = new CinemaRepository();
-        private readonly MovieRepository _movieRepository = new MovieRepository();
-        private readonly ScreeningRepository _screeningRepository = new ScreeningRepository();
+        private readonly CinemaRepository _cinemaRepository;
+        private readonly MovieRepository _movieRepository;
+        private readonly ScreeningRepository _screeningRepository;
 
         public ObservableCollection<Cinema> Cinemas { get; }
         public ObservableCollection<Movie> Movies { get; }
         public ObservableCollection<Hall> AvailableHalls { get; } = new ObservableCollection<Hall>();
 
         public ObservableCollection<string> AvailableStartTimes { get; }
-
 
         private Cinema? _selectedCinema;
         public Cinema? SelectedCinema
@@ -71,20 +70,26 @@ namespace The_Movies.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand BackCommand { get; }
 
-        public ProgramViewModel(MainWindowViewModel mainWindowViewModel)
+        public ProgramViewModel(
+            MainWindowViewModel mainWindowViewModel,
+            CinemaRepository? cinemaRepository = null,
+            MovieRepository? movieRepository = null,
+            ScreeningRepository? screeningRepository = null)
         {
             _mainWindowViewModel = mainWindowViewModel;
+            _cinemaRepository = cinemaRepository ?? new CinemaRepository();
+            _movieRepository = movieRepository ?? new MovieRepository();
+            _screeningRepository = screeningRepository ?? new ScreeningRepository();
 
             Cinemas = new ObservableCollection<Cinema>(_cinemaRepository.LoadAll());
             Movies = new ObservableCollection<Movie>(_movieRepository.LoadAll());
 
             AvailableStartTimes = new ObservableCollection<string>();
-            for (int hour = 0; hour <24; hour++)
+            for (int hour = 0; hour < 24; hour++)
             {
                 for (int minute = 0; minute < 60; minute += 15)
                 {
-                    AvailableStartTimes.Add(
-                        $"{hour:00}:{minute:00}");
+                    AvailableStartTimes.Add($"{hour:00}:{minute:00}");
                 }
             }
 
@@ -119,12 +124,9 @@ namespace The_Movies.ViewModels
 
         private void Save()
         {
-            TimeSpan startTime =
-                TimeSpan.Parse(SelectedStartTime!);
+            TimeSpan startTime = TimeSpan.Parse(SelectedStartTime!);
+            DateTime screeningDateTime = SelectedDate!.Value.Date.Add(startTime);
 
-            DateTime screeningDateTime =
-                SelectedDate!.Value.Date.Add(startTime);
-            
             var screening = new Screening
             {
                 Movie = SelectedMovie!,

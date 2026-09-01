@@ -7,7 +7,12 @@ namespace The_Movies.Services
 {
     public class ScreeningRepository
     {
-        private readonly string _filePath = "screenings.json";
+        private readonly string _filePath;
+
+        public ScreeningRepository(string filePath = "screenings.json")
+        {
+            _filePath = filePath;
+        }
 
         public void Save(List<Screening> screenings)
         {

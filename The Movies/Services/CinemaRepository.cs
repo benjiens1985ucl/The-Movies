@@ -7,7 +7,12 @@ namespace The_Movies.Services
 {
     public class CinemaRepository
     {
-        private readonly string _filePath = "cinemas.json";
+        private readonly string _filePath;
+
+        public CinemaRepository(string filePath = "cinemas.json")
+        {
+            _filePath = filePath;
+        }
 
         public void Save(List<Cinema> cinemas)
         {
