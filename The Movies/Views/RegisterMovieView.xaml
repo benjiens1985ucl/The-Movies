@@ -5,8 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
-        <TextBlock Text="Registrer film" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+    
+    <StackPanel VerticalAlignment="Center" 
+                HorizontalAlignment="Center" 
+                Width="300">
+        <TextBlock 
+            Text="{Binding PageTitle}" 
+            FontSize="24" 
+            FontWeight="Bold" 
+            Margin="0,0,0,20"/>
 
         <TextBlock Text="Titel"/>
         <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
@@ -17,7 +24,14 @@
         <TextBlock Text="Genre"/>
         <ComboBox ItemsSource="{Binding GenreValues}" SelectedItem="{Binding Genre}" Margin="0,0,0,20"/>
 
-        <Button Content="Gem" Width="150" Height="35" Command="{Binding SaveCommand}" Margin="0,0,0,10"/>
-        <Button Content="Tilbage" Width="150" Height="35" Command="{Binding BackCommand}"/>
+        <Button Content="{Binding SaveButtonText}" 
+                Width="150" Height="35" 
+                Command="{Binding SaveCommand}" 
+                Margin="0,0,0,10"/>
+        
+        <Button Content="Tilbage" 
+                Width="150" 
+                Height="35" 
+                Command="{Binding BackCommand}"/>
     </StackPanel>
 </UserControl>

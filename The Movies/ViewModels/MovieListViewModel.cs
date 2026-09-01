@@ -18,6 +18,7 @@ namespace The_Movies.ViewModels
 
         public ICommand BackCommand { get; }
         public ICommand DeleteMovieCommand { get; }
+        public ICommand EditMovieCommand { get; }
 
         public MovieListViewModel(MainWindowViewModel mainWindowViewModel, MovieRepository? movieRepository = null)
         {
@@ -29,8 +30,28 @@ namespace The_Movies.ViewModels
 
             BackCommand = new RelayCommand(_ => Back());
             DeleteMovieCommand = new RelayCommand(_ => DeleteMovie());
+            EditMovieCommand = new RelayCommand(_ => EditMovie());
         }
 
+        private void EditMovie()
+        {
+            if (SelectedMovie == null)
+            {
+                MessageBox.Show(
+                    "Vaelg en film, du vil redigere.",
+                    "Ingen film valgt.",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                return;
+            }
+
+            _mainWindowViewModel.CurrentView =
+                new RegisterMovieViewModel(
+                    _mainWindowViewModel,
+                    SelectedMovie,
+                    Movies);
+        }
         private void DeleteMovie()
         {
             if (SelectedMovie == null)
