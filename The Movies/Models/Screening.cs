@@ -8,6 +8,7 @@ namespace The_Movies.Models
         private const int CleanupMinutes = 20; 
         
         public Movie Movie { get; set; } = new Movie();
+        public string CinemaName { get; set; } = string.Empty;
         public Hall Hall { get; set; } = new Hall();
         public DateTime DateTime { get; set; }
         public bool IsPremiere { get; set; }

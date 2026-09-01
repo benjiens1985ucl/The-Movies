@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="The_Movies.Views.ProgramOverviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:The_Movies.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="900">
+    <Grid Margin="30">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Programoversigt"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Screenings}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  Margin="0,0,0,20">
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Dato"
+                                    Binding="{Binding DateTime, StringFormat={}{0:dd-MM-yyyy}}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Tid"
+                                    Binding="{Binding DateTime, StringFormat={}{0:HH:mm}}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Biograf"
+                                    Binding="{Binding CinemaName}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Sal"
+                                    Binding="{Binding Hall.Number}"
+                                    Width="*"/> 
+
+                <DataGridTextColumn Header="Film"
+                                    Binding="{Binding Movie.Title}"
+                                    Width="2*"/>
+
+                <DataGridTextColumn Header="Genre"
+                                    Binding="{Binding Movie.Genre}"
+                                    Width="*"/>
+
+                <DataGridCheckBoxColumn Header="Premiere"
+                                        Binding="{Binding IsPremiere}"
+                                        Width="*"/>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Grid.Row="2"
+                Content="Tilbage"
+                Width="150"
+                Height="35"
+                HorizontalAlignment="Center"
+                Command="{Binding BackCommand}"/>
+
+    </Grid>
+</UserControl>

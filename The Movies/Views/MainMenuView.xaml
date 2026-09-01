@@ -10,5 +10,11 @@
         <Button Content="Registrer Film" Command="{Binding RegisterMovieCommand}" Width="200" Height="40" Margin="0,0,0,10"/>
         <Button Content="Vis Film" Command="{Binding ShowMovieListCommand}" Width="200" Height="40" Margin="0,0,0,10"/>
         <Button Content="Lav Program" Command="{Binding ShowProgramCommand}" Width="200" Height="40"/>
+
+        <Button Content="Vis Program"
+                Command="{Binding ShowProgramOverviewCommand}"
+                Width="200"
+                Height="40"
+                Margin="0,10,0,0"/>
     </StackPanel>
 </UserControl>

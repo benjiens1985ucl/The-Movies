@@ -145,6 +145,7 @@ namespace The_Movies.ViewModels
             var screening = new Screening
             {
                 Movie = SelectedMovie!,
+                CinemaName = SelectedCinema!.Name,
                 Hall = SelectedHall!,
                 DateTime = screeningDateTime,
                 IsPremiere = IsPremiere
