@@ -18,7 +18,10 @@
         <ComboBox ItemsSource="{Binding Movies}" DisplayMemberPath="Title" SelectedItem="{Binding SelectedMovie}" Margin="0,0,0,10"/>
 
         <TextBlock Text="Dato"/>
-        <DatePicker SelectedDate="{Binding SelectedDate}" Margin="0,0,0,10"/>
+        
+        <DatePicker SelectedDate="{Binding SelectedDate}" 
+                    DisplayDateStart="{Binding Today, Mode=OneWay}"
+                    Margin="0,0,0,10"/>
 
         <TextBlock Text="Starttid"/>
         <ComboBox ItemsSource="{Binding AvailableStartTimes}"

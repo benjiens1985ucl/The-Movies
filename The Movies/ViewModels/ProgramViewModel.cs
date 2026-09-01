@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 using The_Movies.Models;
 using The_Movies.Services;
@@ -124,8 +125,22 @@ namespace The_Movies.ViewModels
 
         private void Save()
         {
-            TimeSpan startTime = TimeSpan.Parse(SelectedStartTime!);
-            DateTime screeningDateTime = SelectedDate!.Value.Date.Add(startTime);
+            TimeSpan startTime = 
+                TimeSpan.Parse(SelectedStartTime!);
+
+            DateTime screeningDateTime =
+                SelectedDate!.Value.Date.Add(startTime);
+
+            if (screeningDateTime < DateTime.Now)
+            {
+                MessageBox.Show(
+                    "Du kan ikke oprette en visning i fortiden.",
+                    "Ugyldigt Tidspunkt",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
 
             var screening = new Screening
             {
