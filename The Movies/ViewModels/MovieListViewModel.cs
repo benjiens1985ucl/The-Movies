@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using The_Movies.Models;
@@ -9,7 +10,7 @@ namespace The_Movies.ViewModels
     public class MovieListViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
-        private readonly MovieRepository _movieRepository = new MovieRepository();
+        private readonly MovieRepository _movieRepository;
 
         public ObservableCollection<Movie> Movies { get; }
 
@@ -18,9 +19,10 @@ namespace The_Movies.ViewModels
         public ICommand BackCommand { get; }
         public ICommand DeleteMovieCommand { get; }
 
-        public MovieListViewModel(MainWindowViewModel mainWindowViewModel)
+        public MovieListViewModel(MainWindowViewModel mainWindowViewModel, MovieRepository? movieRepository = null)
         {
             _mainWindowViewModel = mainWindowViewModel;
+            _movieRepository = movieRepository ?? new MovieRepository();
 
             var loadedMovies = _movieRepository.LoadAll();
             Movies = new ObservableCollection<Movie>(loadedMovies);
@@ -53,10 +55,14 @@ namespace The_Movies.ViewModels
                 return;
             }
 
-            Movies.Remove(SelectedMovie);
-            _movieRepository.Save(new List<Movie>(Movies));
-
+            RemoveMovie(SelectedMovie);
             SelectedMovie = null;
+        }
+
+        public void RemoveMovie(Movie movie)
+        {
+            Movies.Remove(movie);
+            _movieRepository.Save(new List<Movie>(Movies));
         }
 
         private void Back()
