@@ -12,6 +12,9 @@ namespace The_Movies.Models
         public Hall Hall { get; set; } = new Hall();
         public DateTime DateTime { get; set; }
         public bool IsPremiere { get; set; }
+        public int TicketsSold { get; set; }
+        public int AvailableSeats =>
+            Hall.Capacity - TicketsSold;
 
         public DateTime GetMovieStartTime()
         {

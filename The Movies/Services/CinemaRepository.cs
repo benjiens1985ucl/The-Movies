@@ -39,20 +39,27 @@ namespace The_Movies.Services
         {
             return new List<Cinema>
             {
-                CreateCinema("Hjerm", 3),
-                CreateCinema("Videbæk", 5),
-                CreateCinema("Thorsminde", 2),
-                CreateCinema("Ræhr", 4)
+                CreateCinema("Hjerm", 120, 90, 60),
+                CreateCinema("Videbæk", 180, 140, 110, 80, 60),
+                CreateCinema("Thorsminde", 100, 70),
+                CreateCinema("Ræhr", 150, 110, 80, 60)
             };
         }
 
-        private Cinema CreateCinema(string name, int hallCount)
+        private Cinema CreateCinema(string name, params int[] capacities)
         {
-            var cinema = new Cinema { Name = name };
+            var cinema = new Cinema 
+            { 
+                Name = name 
+            };
 
-            for (int i = 1; i <= hallCount; i++)
+            for (int i = 0; i < capacities.Length; i++)
             {
-                cinema.Halls.Add(new Hall { Number = i });
+                cinema.Halls.Add(new Hall
+                {
+                    Number = i + 1,
+                    Capacity = capacities[i]
+                });
             }
 
             return cinema;
