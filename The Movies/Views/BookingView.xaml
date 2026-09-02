@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="The_Movies.Views.BookingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="350">
+        <TextBlock Text="Book billetter" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+
+        <TextBlock Text="Visning"/>
+        <ComboBox ItemsSource="{Binding Screenings}" SelectedItem="{Binding SelectedScreening}" Margin="0,0,0,10">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} - {1:dd-MM-yyyy HH:mm} (Sal {2})">
+                                <Binding Path="Movie.Title"/>
+                                <Binding Path="DateTime"/>
+                                <Binding Path="Hall.Number"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock Text="{Binding AvailableSeats, StringFormat='Ledige pladser: {0}'}" Margin="0,0,0,10" FontWeight="Bold"/>
+
+        <TextBlock Text="Antal billetter"/>
+        <TextBox Text="{Binding TicketCount, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Kundenavn (valgfrit)"/>
+        <TextBox Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,20"/>
+
+        <Button Content="Gem" Width="150" Height="35" Command="{Binding SaveCommand}" Margin="0,0,0,10"/>
+        <Button Content="Tilbage" Width="150" Height="35" Command="{Binding BackCommand}"/>
+    </StackPanel>
+</UserControl>

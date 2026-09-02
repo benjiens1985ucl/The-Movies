@@ -10,6 +10,7 @@ namespace The_Movies.ViewModels
         public ICommand ShowMovieListCommand { get; }
         public ICommand ShowProgramCommand { get; }
         public ICommand ShowProgramOverviewCommand { get; }
+        public ICommand ShowBookingCommand { get; }
 
         public MainMenuViewModel(MainWindowViewModel mainWindowViewModel)
         {
@@ -18,13 +19,12 @@ namespace The_Movies.ViewModels
             RegisterMovieCommand = new RelayCommand(_ => RegisterMovie());
             ShowMovieListCommand = new RelayCommand(_ => ShowMovieList());
             ShowProgramCommand = new RelayCommand(_ => ShowProgram());
-            ShowProgramOverviewCommand =
-                new RelayCommand(_ => ShowProgramOverview());
+            ShowProgramOverviewCommand = new RelayCommand(_ => ShowProgramOverview());
+            ShowBookingCommand = new RelayCommand(_ => ShowBooking());
         }
 
         private void RegisterMovie()
         {
-            System.Diagnostics.Debug.WriteLine("RegisterMovie blev kaldt!");
             _mainWindowViewModel.CurrentView = new RegisterMovieViewModel(_mainWindowViewModel);
         }
 
@@ -32,6 +32,7 @@ namespace The_Movies.ViewModels
         {
             _mainWindowViewModel.CurrentView = new MovieListViewModel(_mainWindowViewModel);
         }
+
         private void ShowProgram()
         {
             _mainWindowViewModel.CurrentView = new ProgramViewModel(_mainWindowViewModel);
@@ -39,8 +40,12 @@ namespace The_Movies.ViewModels
 
         private void ShowProgramOverview()
         {
-            _mainWindowViewModel.CurrentView =
-                new ProgramOverviewViewModel(_mainWindowViewModel);
+            _mainWindowViewModel.CurrentView = new ProgramOverviewViewModel(_mainWindowViewModel);
+        }
+
+        private void ShowBooking()
+        {
+            _mainWindowViewModel.CurrentView = new BookingViewModel(_mainWindowViewModel);
         }
     }
 }

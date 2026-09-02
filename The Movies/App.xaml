@@ -6,19 +6,19 @@
              xmlns:views="clr-namespace:The_Movies.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-       
+
         <DataTemplate DataType="{x:Type vm:MainMenuViewModel}">
             <views:MainMenuView/>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type vm:RegisterMovieViewModel}">
             <views:RegisterMovieView/>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type vm:MovieListViewModel}">
             <views:MovieListView/>
         </DataTemplate>
-       
+
         <DataTemplate DataType="{x:Type vm:ProgramViewModel}">
             <views:ProgramView/>
         </DataTemplate>
@@ -26,6 +26,10 @@
         <DataTemplate DataType="{x:Type vm:ProgramOverviewViewModel}">
             <views:ProgramOverviewView/>
         </DataTemplate>
-    
+
+        <DataTemplate DataType="{x:Type vm:BookingViewModel}">
+            <views:BookingView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>
