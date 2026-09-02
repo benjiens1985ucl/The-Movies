@@ -10,7 +10,7 @@ namespace The_Movies.ViewModels
     public class RegisterMovieViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
-        private readonly MovieRepository _movieRepository = new MovieRepository();
+        private readonly MovieRepository _movieRepository;
 
         private Movie? _movieToEdit;
         private ObservableCollection<Movie>? _movies;
@@ -29,7 +29,7 @@ namespace The_Movies.ViewModels
             set => SetProperty(ref _duration, value);
         }
 
-        private Genre _genre; 
+        private Genre _genre;
         public Genre Genre
         {
             get => _genre;
@@ -43,22 +43,25 @@ namespace The_Movies.ViewModels
 
         public string SaveButtonText =>
             _movieToEdit == null ? "Gem" : "Gem Aendringer";
+
         public ICommand SaveCommand { get; }
         public ICommand BackCommand { get; }
 
-        public RegisterMovieViewModel(MainWindowViewModel mainWindowViewModel)
+        public RegisterMovieViewModel(MainWindowViewModel mainWindowViewModel, MovieRepository? movieRepository = null)
         {
             _mainWindowViewModel = mainWindowViewModel;
+            _movieRepository = movieRepository ?? new MovieRepository();
 
             SaveCommand = new RelayCommand(_ => Save(), CanSave);
             BackCommand = new RelayCommand(_ => Back());
         }
 
         public RegisterMovieViewModel(
-            MainWindowViewModel mainWindowViewModel, 
+            MainWindowViewModel mainWindowViewModel,
             Movie movie,
-            ObservableCollection<Movie> movies)
-            : this(mainWindowViewModel)
+            ObservableCollection<Movie> movies,
+            MovieRepository? movieRepository = null)
+            : this(mainWindowViewModel, movieRepository)
         {
             _movieToEdit = movie;
             _movies = movies;
@@ -99,25 +102,20 @@ namespace The_Movies.ViewModels
             _movieToEdit.Duration = int.Parse(Duration);
             _movieToEdit.Genre = Genre;
 
-            _movieRepository.Save(
-                new List<Movie>(_movies!));
+            _movieRepository.Save(new List<Movie>(_movies!));
 
-            _mainWindowViewModel.CurrentView =
-                new MovieListViewModel(_mainWindowViewModel);
-
+            _mainWindowViewModel.CurrentView = new MovieListViewModel(_mainWindowViewModel);
         }
 
         private void Back()
         {
             if (_movieToEdit != null)
             {
-                _mainWindowViewModel.CurrentView = 
-                    new MovieListViewModel(_mainWindowViewModel);
+                _mainWindowViewModel.CurrentView = new MovieListViewModel(_mainWindowViewModel);
             }
             else
             {
-                _mainWindowViewModel.CurrentView = 
-                    new MainMenuViewModel(_mainWindowViewModel);
+                _mainWindowViewModel.CurrentView = new MainMenuViewModel(_mainWindowViewModel);
             }
         }
     }

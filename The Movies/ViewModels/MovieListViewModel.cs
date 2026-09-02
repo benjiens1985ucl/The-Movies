@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using The_Movies.Models;
@@ -11,6 +12,7 @@ namespace The_Movies.ViewModels
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly MovieRepository _movieRepository;
+        private readonly ScreeningRepository _screeningRepository;
 
         public ObservableCollection<Movie> Movies { get; }
 
@@ -20,10 +22,14 @@ namespace The_Movies.ViewModels
         public ICommand DeleteMovieCommand { get; }
         public ICommand EditMovieCommand { get; }
 
-        public MovieListViewModel(MainWindowViewModel mainWindowViewModel, MovieRepository? movieRepository = null)
+        public MovieListViewModel(
+            MainWindowViewModel mainWindowViewModel,
+            MovieRepository? movieRepository = null,
+            ScreeningRepository? screeningRepository = null)
         {
             _mainWindowViewModel = mainWindowViewModel;
             _movieRepository = movieRepository ?? new MovieRepository();
+            _screeningRepository = screeningRepository ?? new ScreeningRepository();
 
             var loadedMovies = _movieRepository.LoadAll();
             Movies = new ObservableCollection<Movie>(loadedMovies);
@@ -31,6 +37,14 @@ namespace The_Movies.ViewModels
             BackCommand = new RelayCommand(_ => Back());
             DeleteMovieCommand = new RelayCommand(_ => DeleteMovie());
             EditMovieCommand = new RelayCommand(_ => EditMovie());
+        }
+
+        public bool IsMovieOnProgram(Movie movie)
+        {
+            var screenings = _screeningRepository.LoadAll();
+            return screenings.Any(s => s.Movie.Title == movie.Title
+                && s.Movie.Duration == movie.Duration
+                && s.Movie.Genre == movie.Genre);
         }
 
         private void EditMovie()
@@ -52,6 +66,7 @@ namespace The_Movies.ViewModels
                     SelectedMovie,
                     Movies);
         }
+
         private void DeleteMovie()
         {
             if (SelectedMovie == null)
@@ -61,6 +76,17 @@ namespace The_Movies.ViewModels
                     "Ingen film valgt.",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
+
+                return;
+            }
+
+            if (IsMovieOnProgram(SelectedMovie))
+            {
+                MessageBox.Show(
+                    $"\"{SelectedMovie.Title}\" er på programmet og kan ikke slettes.",
+                    "Kan ikke slette film",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
 
                 return;
             }
