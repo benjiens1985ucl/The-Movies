@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="1200">
     <Grid Margin="20">
@@ -26,7 +27,7 @@
 
             <TextBlock Text="Dato"/>
             <DatePicker SelectedDate="{Binding SelectedDate}"
-                        DisplayDateStart="{Binding Today, Mode=OneWay}"
+                        DisplayDateStart="{x:Static sys:DateTime.Today}"
                         Margin="0,0,0,10"/>
 
             <TextBlock Text="Filmen tilføjes automatisk efter sidste visning den dag (eller kl. 10:00, hvis salen er tom)." FontSize="11" Foreground="Gray" TextWrapping="Wrap" Margin="0,0,0,10"/>

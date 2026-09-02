@@ -10,6 +10,7 @@ namespace The_Movies.ViewModels
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly ScreeningRepository _screeningRepository;
+        private readonly MovieRepository _movieRepository;
         private readonly BookingRepository _bookingRepository;
 
         public ObservableCollection<Screening> Screenings { get; }
@@ -61,13 +62,16 @@ namespace The_Movies.ViewModels
         public BookingViewModel(
             MainWindowViewModel mainWindowViewModel,
             ScreeningRepository? screeningRepository = null,
+            MovieRepository? movieRepository = null,
             BookingRepository? bookingRepository = null)
         {
             _mainWindowViewModel = mainWindowViewModel;
             _screeningRepository = screeningRepository ?? new ScreeningRepository();
+            _movieRepository = movieRepository ?? new MovieRepository();
             _bookingRepository = bookingRepository ?? new BookingRepository();
 
-            Screenings = new ObservableCollection<Screening>(_screeningRepository.LoadAll());
+            var movies = _movieRepository.LoadAll();
+            Screenings = new ObservableCollection<Screening>(_screeningRepository.LoadAll(movies));
 
             SaveCommand = new RelayCommand(_ => Save(), CanSave);
             BackCommand = new RelayCommand(_ => Back());

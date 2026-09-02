@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace The_Movies.Models
 {
@@ -8,8 +9,11 @@ namespace The_Movies.Models
         private const int CleanupMinutes = 20;
 
         public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid MovieId { get; set; }
 
+        [JsonIgnore]
         public Movie Movie { get; set; } = new Movie();
+
         public string CinemaName { get; set; } = string.Empty;
         public Hall Hall { get; set; } = new Hall();
         public DateTime DateTime { get; set; }

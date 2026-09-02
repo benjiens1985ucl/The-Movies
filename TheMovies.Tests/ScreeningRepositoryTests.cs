@@ -15,16 +15,19 @@ namespace TheMovies.Tests
             string testFile = $"test_screenings_{Guid.NewGuid()}.json";
             var repository = new ScreeningRepository(testFile);
 
+            var movie = new Movie { Title = "Test Film", Duration = 90 };
+
             var screening = new Screening
             {
-                Movie = new Movie { Title = "Test Film", Duration = 90 },
+                MovieId = movie.Id,
+                Movie = movie,
                 Hall = new Hall { Number = 1 },
                 DateTime = new DateTime(2026, 1, 1, 18, 0, 0),
                 IsPremiere = true
             };
 
             repository.Save(new List<Screening> { screening });
-            var loaded = repository.LoadAll();
+            var loaded = repository.LoadAll(new List<Movie> { movie });
 
             Assert.AreEqual(1, loaded.Count);
             Assert.AreEqual("Test Film", loaded[0].Movie.Title);

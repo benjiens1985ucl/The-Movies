@@ -42,9 +42,7 @@ namespace The_Movies.ViewModels
         public bool IsMovieOnProgram(Movie movie)
         {
             var screenings = _screeningRepository.LoadAll();
-            return screenings.Any(s => s.Movie.Title == movie.Title
-                && s.Movie.Duration == movie.Duration
-                && s.Movie.Genre == movie.Genre);
+            return screenings.Any(s => s.MovieId == movie.Id);
         }
 
         private void EditMovie()

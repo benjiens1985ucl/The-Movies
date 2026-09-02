@@ -159,7 +159,7 @@ namespace The_Movies.ViewModels
                 return;
             }
 
-            var screenings = _screeningRepository.LoadAll()
+            var screenings = _screeningRepository.LoadAll(Movies.ToList())
                 .Where(s => s.CinemaName == SelectedCinema.Name && s.Hall.Number == SelectedHall.Number)
                 .ToList();
 
@@ -179,7 +179,7 @@ namespace The_Movies.ViewModels
 
         private DateTime GetNextAvailableStartTime(DateTime date)
         {
-            var screenings = _screeningRepository.LoadAll()
+            var screenings = _screeningRepository.LoadAll(Movies.ToList())
                 .Where(s => s.CinemaName == SelectedCinema!.Name
                     && s.Hall.Number == SelectedHall!.Number
                     && s.DateTime.Date == date.Date)
@@ -199,7 +199,8 @@ namespace The_Movies.ViewModels
             return SelectedCinema != null
                 && SelectedHall != null
                 && SelectedMovie != null
-                && SelectedDate != null;
+                && SelectedDate != null
+                && SelectedDate.Value.Date >= DateTime.Today;
         }
 
         private void Save()
@@ -208,6 +209,7 @@ namespace The_Movies.ViewModels
 
             var screening = new Screening
             {
+                MovieId = SelectedMovie!.Id,
                 Movie = SelectedMovie!,
                 CinemaName = SelectedCinema!.Name,
                 Hall = SelectedHall!,
@@ -215,7 +217,7 @@ namespace The_Movies.ViewModels
                 IsPremiere = IsPremiere
             };
 
-            var screenings = _screeningRepository.LoadAll();
+            var screenings = _screeningRepository.LoadAll(Movies.ToList());
             screenings.Add(screening);
             _screeningRepository.Save(screenings);
 

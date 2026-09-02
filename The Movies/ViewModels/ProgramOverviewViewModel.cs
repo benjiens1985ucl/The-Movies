@@ -1,52 +1,67 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Data;
-using The_Movies.Services;
+using System.Windows.Input;
 using The_Movies.Models;
+using The_Movies.Services;
 
 namespace The_Movies.ViewModels
 {
     public class ProgramOverviewViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
-        private readonly ScreeningRepository _screeningRepository =
-            new ScreeningRepository();
+        private readonly CinemaRepository _cinemaRepository;
+        private readonly MovieRepository _movieRepository;
+        private readonly ScreeningRepository _screeningRepository;
 
-        public ObservableCollection<Screening> Screenings { get; }
+        public ObservableCollection<Cinema> Cinemas { get; }
+        public ObservableCollection<Hall> AvailableHalls { get; } = new ObservableCollection<Hall>();
+        public ObservableCollection<DayColumn> WeekDays { get; } = new ObservableCollection<DayColumn>();
 
-        public ICommand BackCommand { get; }
+        public ObservableCollection<string> MovieFilters { get; } = new ObservableCollection<string> { "Alle" };
+        public ObservableCollection<string> GenreFilters { get; } = new ObservableCollection<string> { "Alle" };
 
-        public ICollectionView FilteredScreenings { get; }
-        public ObservableCollection<string> CinemaFilters { get; }
-        
-        private string _selectedCinemaFilter = "Alle";
-
-        public string SelectedCinemaFilter
+        private DateTime _selectedWeekStart = GetStartOfWeek(DateTime.Today);
+        public DateTime SelectedWeekStart
         {
-            get => _selectedCinemaFilter;
+            get => _selectedWeekStart;
             set
             {
-                if (SetProperty(ref _selectedCinemaFilter, value))
+                if (SetProperty(ref _selectedWeekStart, value))
                 {
-                    FilteredScreenings.Refresh();
+                    UpdateWeekDays();
                 }
             }
         }
 
-        public ObservableCollection<string> MovieFilters { get; }
-        public ObservableCollection<string> GenreFilters { get; }
+        public string WeekLabel => $"{SelectedWeekStart:dd-MM-yyyy} - {SelectedWeekStart.AddDays(6):dd-MM-yyyy}";
 
-        public ObservableCollection<string> PeriodFilters { get; } =
-            new ObservableCollection<string>
+        private Cinema? _selectedCinema;
+        public Cinema? SelectedCinema
+        {
+            get => _selectedCinema;
+            set
             {
-                "Alle",
-                "Dato",
-                "Uge",
-                "Maaned"
-            };
+                if (SetProperty(ref _selectedCinema, value))
+                {
+                    UpdateAvailableHalls();
+                    UpdateWeekDays();
+                }
+            }
+        }
+
+        private Hall? _selectedHall;
+        public Hall? SelectedHall
+        {
+            get => _selectedHall;
+            set
+            {
+                if (SetProperty(ref _selectedHall, value))
+                {
+                    UpdateWeekDays();
+                }
+            }
+        }
 
         private string _selectedMovieFilter = "Alle";
         public string SelectedMovieFilter
@@ -56,7 +71,7 @@ namespace The_Movies.ViewModels
             {
                 if (SetProperty(ref _selectedMovieFilter, value))
                 {
-                    FilteredScreenings.Refresh();
+                    UpdateWeekDays();
                 }
             }
         }
@@ -69,177 +84,117 @@ namespace The_Movies.ViewModels
             {
                 if (SetProperty(ref _selectedGenreFilter, value))
                 {
-                    FilteredScreenings.Refresh();
+                    UpdateWeekDays();
                 }
             }
         }
 
-        private string _selectedPeriodFilter = "Alle";
-        public string SelectedPeriodFilter
-        {
-            get => _selectedPeriodFilter;
-            set
-            {
-                if (SetProperty(ref _selectedPeriodFilter, value))
-                {
-                    FilteredScreenings.Refresh();
-                }
-            }
-        }
-
-        private DateTime? _selectedFilterDate = DateTime.Today;
-        public DateTime? SelectedFilterDate
-        {
-            get => _selectedFilterDate;
-            set
-            {
-                if (SetProperty(ref _selectedFilterDate, value))
-                {
-                    FilteredScreenings.Refresh();
-                }
-            }
-        }
+        public ICommand BackCommand { get; }
+        public ICommand PreviousWeekCommand { get; }
+        public ICommand NextWeekCommand { get; }
 
         public ProgramOverviewViewModel(
-            MainWindowViewModel mainWindowViewModel)
+            MainWindowViewModel mainWindowViewModel,
+            CinemaRepository? cinemaRepository = null,
+            MovieRepository? movieRepository = null,
+            ScreeningRepository? screeningRepository = null)
         {
             _mainWindowViewModel = mainWindowViewModel;
+            _cinemaRepository = cinemaRepository ?? new CinemaRepository();
+            _movieRepository = movieRepository ?? new MovieRepository();
+            _screeningRepository = screeningRepository ?? new ScreeningRepository();
 
-            var screenings = _screeningRepository
-                .LoadAll()
-                .OrderBy(s => s.DateTime);
+            Cinemas = new ObservableCollection<Cinema>(_cinemaRepository.LoadAll());
 
-            Screenings = new ObservableCollection<Screening>(screenings);
+            var movies = _movieRepository.LoadAll();
+            var allScreenings = _screeningRepository.LoadAll(movies);
 
-            CinemaFilters = new ObservableCollection<string>
+            foreach (var title in allScreenings.Select(s => s.Movie.Title).Distinct().OrderBy(t => t))
             {
-                "Alle"
-            };
-
-            foreach (var cinemaName in Screenings
-                .Select(s => s.CinemaName)
-                .Where(name => !string.IsNullOrWhiteSpace(name))
-                .Distinct()
-                .OrderBy(name => name))
-            {
-                CinemaFilters.Add(cinemaName);
+                MovieFilters.Add(title);
             }
 
-            MovieFilters = new ObservableCollection<string>
-            {
-                "Alle"
-            };
-            
-            foreach (var movieTitle in Screenings
-                    .Select(s => s.Movie.Title)
-                    .Where(title => !string.IsNullOrWhiteSpace(title))
-                    .Distinct()
-                    .OrderBy(title => title))
-            {
-                MovieFilters.Add(movieTitle);
-            }
-
-            GenreFilters = new ObservableCollection<string>
-            {
-                "Alle"
-            };
-
-            foreach (var genre in Screenings
-                .Select(s => s.Movie.Genre.ToString())
-                .Distinct()
-                .OrderBy(genre => genre))
+            foreach (var genre in allScreenings.Select(s => s.Movie.Genre.ToString()).Distinct().OrderBy(g => g))
             {
                 GenreFilters.Add(genre);
             }
 
-            FilteredScreenings =
-                CollectionViewSource.GetDefaultView(Screenings);
-
-            FilteredScreenings.Filter = FilterScreening;
-
-
             BackCommand = new RelayCommand(_ => Back());
+            PreviousWeekCommand = new RelayCommand(_ => SelectedWeekStart = SelectedWeekStart.AddDays(-7));
+            NextWeekCommand = new RelayCommand(_ => SelectedWeekStart = SelectedWeekStart.AddDays(7));
 
+            UpdateWeekDays();
         }
 
-        private bool FilterScreening(object item)
+        private static DateTime GetStartOfWeek(DateTime date)
         {
-            if (item is not Screening screening)
-            {
-                return false;
-            }
-
-            bool matchesCinema =
-                SelectedCinemaFilter == "Alle"
-                || screening.CinemaName == SelectedCinemaFilter;
-
-            bool matchesMovie =
-                SelectedMovieFilter == "Alle"
-                || screening.Movie.Title == SelectedMovieFilter;
-
-            bool matchesGenre =
-                SelectedGenreFilter == "Alle"
-                || screening.Movie.Genre.ToString() == SelectedGenreFilter;
-
-            bool matchesDate =
-                MatchesDateFilter(screening);
-
-            return matchesCinema
-                && matchesMovie
-                && matchesGenre
-                && matchesDate;
-        }
-
-        private bool MatchesDateFilter(Screening screening)
-        {
-            if (SelectedPeriodFilter == "Alle")
-            {
-                return true;
-            }
-
-            if (SelectedFilterDate == null)
-            {
-                return true;
-            }
-
-            DateTime screeningDate = screening.DateTime.Date;
-            DateTime selectedDate = SelectedFilterDate.Value.Date;
-
-            if (SelectedPeriodFilter == "Dato")
-            {
-                return screeningDate == selectedDate;
-            }
-
-            if (SelectedPeriodFilter == "Uge")
-            {
-                DateTime startOfWeek = GetStartOfWeek(selectedDate);
-                DateTime endOfWeek = startOfWeek.AddDays(7);
-
-                return screeningDate >= startOfWeek
-                    && screeningDate < endOfWeek;
-            }
-
-            if (SelectedPeriodFilter == "Maaned")
-            {
-                return screeningDate.Year == selectedDate.Year
-                && screeningDate.Month == selectedDate.Month;
-            }
-
-            return true;
-        }
-
-        private DateTime GetStartOfWeek(DateTime date)
-        {
-            int difference =
-                (7 + (date.DayOfWeek - DayOfWeek.Monday)) % 7;
-
+            int difference = (7 + (date.DayOfWeek - DayOfWeek.Monday)) % 7;
             return date.AddDays(-difference).Date;
+        }
+
+        private void UpdateAvailableHalls()
+        {
+            AvailableHalls.Clear();
+            SelectedHall = null;
+
+            if (SelectedCinema == null)
+            {
+                return;
+            }
+
+            foreach (var hall in SelectedCinema.Halls)
+            {
+                AvailableHalls.Add(hall);
+            }
+        }
+
+        private void UpdateWeekDays()
+        {
+            WeekDays.Clear();
+            OnPropertyChanged(nameof(WeekLabel));
+
+            var movies = _movieRepository.LoadAll();
+            var screenings = _screeningRepository.LoadAll(movies).AsEnumerable();
+
+            if (SelectedCinema != null)
+            {
+                screenings = screenings.Where(s => s.CinemaName == SelectedCinema.Name);
+            }
+
+            if (SelectedHall != null)
+            {
+                screenings = screenings.Where(s => s.Hall.Number == SelectedHall.Number);
+            }
+
+            if (SelectedMovieFilter != "Alle")
+            {
+                screenings = screenings.Where(s => s.Movie.Title == SelectedMovieFilter);
+            }
+
+            if (SelectedGenreFilter != "Alle")
+            {
+                screenings = screenings.Where(s => s.Movie.Genre.ToString() == SelectedGenreFilter);
+            }
+
+            var screeningList = screenings.ToList();
+
+            for (int i = 0; i < 7; i++)
+            {
+                var date = SelectedWeekStart.AddDays(i);
+                var day = new DayColumn { Date = date };
+
+                foreach (var screening in screeningList.Where(s => s.DateTime.Date == date).OrderBy(s => s.DateTime))
+                {
+                    day.Screenings.Add(screening);
+                }
+
+                WeekDays.Add(day);
+            }
         }
 
         private void Back()
         {
-            _mainWindowViewModel.CurrentView =
-                new MainMenuViewModel(_mainWindowViewModel);
+            _mainWindowViewModel.CurrentView = new MainMenuViewModel(_mainWindowViewModel);
         }
     }
 }
