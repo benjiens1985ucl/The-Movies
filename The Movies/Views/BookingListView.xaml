@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="The_Movies.Views.BookingListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="900">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Bookinger" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,15">
+            <StackPanel Margin="0,0,15,0">
+                <TextBlock Text="Biograf"/>
+                <ComboBox ItemsSource="{Binding Cinemas}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedCinema}" Width="140"/>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="Sal"/>
+                <ComboBox ItemsSource="{Binding AvailableHalls}" DisplayMemberPath="Number" SelectedItem="{Binding SelectedHall}" Width="100"/>
+            </StackPanel>
+        </WrapPanel>
+
+        <ListView Grid.Row="2" ItemsSource="{Binding Bookings}" SelectedItem="{Binding SelectedBooking}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Biograf" DisplayMemberBinding="{Binding Screening.CinemaName}" Width="100"/>
+                    <GridViewColumn Header="Sal" DisplayMemberBinding="{Binding Screening.Hall.Number}" Width="50"/>
+                    <GridViewColumn Header="Film" DisplayMemberBinding="{Binding Screening.Movie.Title}" Width="180"/>
+                    <GridViewColumn Header="Tidspunkt" Width="140">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Screening.DateTime, StringFormat={}{0:dd-MM-yyyy HH:mm}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Antal" DisplayMemberBinding="{Binding Booking.TicketCount}" Width="60"/>
+                    <GridViewColumn Header="Kunde" DisplayMemberBinding="{Binding Booking.CustomerName}" Width="120"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+            <Button Content="Rediger Booking" Width="150" Height="35" Margin="0,0,10,0" Command="{Binding EditBookingCommand}"/>
+            <Button Content="Slet Booking" Width="150" Height="35" Margin="0,0,10,0" Command="{Binding DeleteBookingCommand}"/>
+            <Button Content="Tilbage" Width="150" Height="35" Command="{Binding BackCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

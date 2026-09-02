@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -34,12 +35,33 @@ namespace The_Movies.Services
             return bookings ?? new List<Booking>();
         }
 
-        public int GetTicketsSold(System.Guid screeningId)
+        public int GetTicketsSold(Guid screeningId)
         {
             var bookings = LoadAll();
             return bookings
                 .Where(b => b.ScreeningId == screeningId)
                 .Sum(b => b.TicketCount);
+        }
+
+        public void Update(Booking updatedBooking)
+        {
+            var bookings = LoadAll();
+            var existing = bookings.FirstOrDefault(b => b.Id == updatedBooking.Id);
+
+            if (existing != null)
+            {
+                existing.TicketCount = updatedBooking.TicketCount;
+                existing.CustomerName = updatedBooking.CustomerName;
+            }
+
+            Save(bookings);
+        }
+
+        public void Delete(Guid bookingId)
+        {
+            var bookings = LoadAll();
+            bookings.RemoveAll(b => b.Id == bookingId);
+            Save(bookings);
         }
     }
 }

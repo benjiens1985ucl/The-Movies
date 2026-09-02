@@ -11,6 +11,7 @@
         <Button Content="Vis Film" Command="{Binding ShowMovieListCommand}" Width="200" Height="40" Margin="0,0,0,10"/>
         <Button Content="Lav Program" Command="{Binding ShowProgramCommand}" Width="200" Height="40" Margin="0,0,0,10"/>
         <Button Content="Vis Program" Command="{Binding ShowProgramOverviewCommand}" Width="200" Height="40" Margin="0,0,0,10"/>
-        <Button Content="Book Billetter" Command="{Binding ShowBookingCommand}" Width="200" Height="40"/>
+        <Button Content="Book Billetter" Command="{Binding ShowBookingCommand}" Width="200" Height="40" Margin="0,0,0,10"/>
+        <Button Content="Vis Bookinger" Command="{Binding ShowBookingListCommand}" Width="200" Height="40"/>
     </StackPanel>
 </UserControl>
