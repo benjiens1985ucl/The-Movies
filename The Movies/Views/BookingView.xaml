@@ -31,7 +31,9 @@
         <TextBox Text="{Binding TicketCount, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
         <TextBlock Text="Kundenavn (valgfrit)"/>
-        <TextBox Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,20"/>
+        <TextBox Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+        <TextBlock Text="{Binding StatusMessage}" Foreground="Green" HorizontalAlignment="Center" Margin="0,0,0,10" TextWrapping="Wrap"/>
 
         <Button Content="Gem" Width="150" Height="35" Command="{Binding SaveCommand}" Margin="0,0,0,10"/>
         <Button Content="Tilbage" Width="150" Height="35" Command="{Binding BackCommand}"/>

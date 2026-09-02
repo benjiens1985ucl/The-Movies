@@ -44,6 +44,13 @@ namespace The_Movies.ViewModels
         public string SaveButtonText =>
             _movieToEdit == null ? "Gem" : "Gem Aendringer";
 
+        private string _statusMessage = string.Empty;
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set => SetProperty(ref _statusMessage, value);
+        }
+
         public ICommand SaveCommand { get; }
         public ICommand BackCommand { get; }
 
@@ -93,7 +100,11 @@ namespace The_Movies.ViewModels
                 movies.Add(movie);
                 _movieRepository.Save(movies);
 
-                _mainWindowViewModel.CurrentView = new MainMenuViewModel(_mainWindowViewModel);
+                StatusMessage = $"Du har registreret \"{movie.Title}\".";
+
+                Title = string.Empty;
+                Duration = string.Empty;
+                Genre = default;
 
                 return;
             }
@@ -104,7 +115,7 @@ namespace The_Movies.ViewModels
 
             _movieRepository.Save(new List<Movie>(_movies!));
 
-            _mainWindowViewModel.CurrentView = new MovieListViewModel(_mainWindowViewModel);
+            StatusMessage = $"Du har opdateret \"{_movieToEdit.Title}\".";
         }
 
         private void Back()

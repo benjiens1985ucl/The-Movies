@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using The_Movies.Models;
 using The_Movies.Services;
@@ -41,7 +40,7 @@ namespace TheMovies.Tests
             viewModel.SelectedCinema = new Cinema { Name = "Test Biograf" };
             viewModel.SelectedHall = new Hall { Number = 1 };
             viewModel.SelectedDate = DateTime.Today;
-            viewModel.SelectedStartTime = "18:00";
+            // SelectedMovie er bevidst ikke sat
 
             bool canSave = viewModel.SaveCommand.CanExecute(null);
 
@@ -58,7 +57,6 @@ namespace TheMovies.Tests
             viewModel.SelectedHall = new Hall { Number = 1 };
             viewModel.SelectedMovie = new Movie { Title = "Test Film", Duration = 90 };
             viewModel.SelectedDate = DateTime.Today;
-            viewModel.SelectedStartTime = "18:00";
 
             bool canSave = viewModel.SaveCommand.CanExecute(null);
 

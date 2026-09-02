@@ -48,6 +48,13 @@ namespace The_Movies.ViewModels
             set => SetProperty(ref _customerName, value);
         }
 
+        private string _statusMessage = string.Empty;
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set => SetProperty(ref _statusMessage, value);
+        }
+
         public ICommand SaveCommand { get; }
         public ICommand BackCommand { get; }
 
@@ -88,10 +95,12 @@ namespace The_Movies.ViewModels
 
         private void Save()
         {
+            int ticketCount = int.Parse(TicketCount);
+
             var booking = new Booking
             {
                 ScreeningId = SelectedScreening!.Id,
-                TicketCount = int.Parse(TicketCount),
+                TicketCount = ticketCount,
                 CustomerName = CustomerName
             };
 
@@ -99,7 +108,12 @@ namespace The_Movies.ViewModels
             bookings.Add(booking);
             _bookingRepository.Save(bookings);
 
-            _mainWindowViewModel.CurrentView = new MainMenuViewModel(_mainWindowViewModel);
+            StatusMessage = $"Du har booket {ticketCount} billet(ter).";
+
+            TicketCount = string.Empty;
+            CustomerName = string.Empty;
+
+            UpdateAvailableSeats();
         }
 
         private void Back()
