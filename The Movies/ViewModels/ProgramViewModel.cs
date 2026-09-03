@@ -185,13 +185,24 @@ namespace The_Movies.ViewModels
                     && s.DateTime.Date == date.Date)
                 .ToList();
 
+            DateTime candidateStart;
+
             if (screenings.Count == 0)
             {
-                return date.Date.Add(OpeningTime);
+                candidateStart = date.Date.Add(OpeningTime);
+            }
+            else
+            {
+                var lastScreening = screenings.OrderBy(s => s.DateTime).Last();
+                candidateStart = lastScreening.GetHallAvailableTime();
             }
 
-            var lastScreening = screenings.OrderBy(s => s.DateTime).Last();
-            return lastScreening.GetHallAvailableTime();
+            if (date.Date == DateTime.Today && candidateStart < DateTime.Now)
+            {
+                candidateStart = DateTime.Now;
+            }
+
+            return candidateStart;
         }
 
         private bool CanSave(object? parameter)
