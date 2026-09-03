@@ -9,25 +9,26 @@ namespace TheMovies.Tests
     [TestClass]
     public class BookingViewModelTests
     {
-        private (BookingViewModel viewModel, ScreeningRepository screeningRepository, MovieRepository movieRepository, BookingRepository bookingRepository) CreateViewModel(
+        private (BookingViewModel viewModel, CinemaRepository cinemaRepository, ScreeningRepository screeningRepository, MovieRepository movieRepository, BookingRepository bookingRepository) CreateViewModel(
             MainWindowViewModel mainWindowViewModel)
         {
             string suffix = Guid.NewGuid().ToString();
 
+            var cinemaRepository = new CinemaRepository($"test_cinemas_{suffix}.json");
             var screeningRepository = new ScreeningRepository($"test_screenings_{suffix}.json");
             var movieRepository = new MovieRepository($"test_movies_{suffix}.json");
             var bookingRepository = new BookingRepository($"test_bookings_{suffix}.json");
 
-            var viewModel = new BookingViewModel(mainWindowViewModel, screeningRepository, movieRepository, bookingRepository);
+            var viewModel = new BookingViewModel(mainWindowViewModel, cinemaRepository, screeningRepository, movieRepository, bookingRepository);
 
-            return (viewModel, screeningRepository, movieRepository, bookingRepository);
+            return (viewModel, cinemaRepository, screeningRepository, movieRepository, bookingRepository);
         }
 
         [TestMethod]
         public void CanSave_ReturnsFalse_WhenNoScreeningIsSelected()
         {
             var mainWindowViewModel = new MainWindowViewModel();
-            var (viewModel, _, _, _) = CreateViewModel(mainWindowViewModel);
+            var (viewModel, _, _, _, _) = CreateViewModel(mainWindowViewModel);
 
             viewModel.TicketCount = "2";
 
@@ -40,7 +41,7 @@ namespace TheMovies.Tests
         public void CanSave_ReturnsFalse_WhenTicketCountExceedsAvailableSeats()
         {
             var mainWindowViewModel = new MainWindowViewModel();
-            var (viewModel, _, _, _) = CreateViewModel(mainWindowViewModel);
+            var (viewModel, _, _, _, _) = CreateViewModel(mainWindowViewModel);
 
             var screening = new Screening
             {
@@ -60,7 +61,7 @@ namespace TheMovies.Tests
         public void CanSave_ReturnsFalse_WhenNoSeatsAreAvailable()
         {
             var mainWindowViewModel = new MainWindowViewModel();
-            var (viewModel, _, _, _) = CreateViewModel(mainWindowViewModel);
+            var (viewModel, _, _, _, _) = CreateViewModel(mainWindowViewModel);
 
             var screening = new Screening
             {
@@ -80,7 +81,7 @@ namespace TheMovies.Tests
         public void CanSave_ReturnsTrue_WhenTicketCountIsWithinCapacity()
         {
             var mainWindowViewModel = new MainWindowViewModel();
-            var (viewModel, _, _, _) = CreateViewModel(mainWindowViewModel);
+            var (viewModel, _, _, _, _) = CreateViewModel(mainWindowViewModel);
 
             var screening = new Screening
             {
@@ -100,7 +101,7 @@ namespace TheMovies.Tests
         public void Save_ReducesAvailableSeats_AfterBooking()
         {
             var mainWindowViewModel = new MainWindowViewModel();
-            var (viewModel, _, _, _) = CreateViewModel(mainWindowViewModel);
+            var (viewModel, _, _, _, _) = CreateViewModel(mainWindowViewModel);
 
             var screening = new Screening
             {

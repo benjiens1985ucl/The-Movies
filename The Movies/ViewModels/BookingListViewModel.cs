@@ -54,6 +54,19 @@ namespace The_Movies.ViewModels
             }
         }
 
+        private string _customerSearch = string.Empty;
+        public string CustomerSearch
+        {
+            get => _customerSearch;
+            set
+            {
+                if (SetProperty(ref _customerSearch, value))
+                {
+                    UpdateBookings();
+                }
+            }
+        }
+
         public BookingDisplayItem? SelectedBooking { get; set; }
 
         public ICommand BackCommand { get; }
@@ -122,6 +135,11 @@ namespace The_Movies.ViewModels
             if (SelectedHall != null)
             {
                 items = items.Where(i => i.Screening.Hall.Number == SelectedHall.Number);
+            }
+
+            if (!string.IsNullOrWhiteSpace(CustomerSearch))
+            {
+                items = items.Where(i => i.Booking.CustomerName.Contains(CustomerSearch, StringComparison.OrdinalIgnoreCase));
             }
 
             foreach (var item in items.OrderBy(i => i.Screening.DateTime))
