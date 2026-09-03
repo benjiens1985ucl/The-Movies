@@ -31,6 +31,28 @@ namespace TheMovies.Tests
             var (viewModel, _, _, _, _) = CreateViewModel(mainWindowViewModel);
 
             viewModel.TicketCount = "2";
+            viewModel.CustomerName = "Test Kunde";
+
+            bool canSave = viewModel.SaveCommand.CanExecute(null);
+
+            Assert.IsFalse(canSave);
+        }
+
+        [TestMethod]
+        public void CanSave_ReturnsFalse_WhenCustomerNameIsEmpty()
+        {
+            var mainWindowViewModel = new MainWindowViewModel();
+            var (viewModel, _, _, _, _) = CreateViewModel(mainWindowViewModel);
+
+            var screening = new Screening
+            {
+                Movie = new Movie { Title = "Test Film", Duration = 90 },
+                Hall = new Hall { Number = 1, Capacity = 10 }
+            };
+
+            viewModel.SelectedScreening = screening;
+            viewModel.TicketCount = "2";
+            // CustomerName er bevidst ikke sat
 
             bool canSave = viewModel.SaveCommand.CanExecute(null);
 
@@ -51,6 +73,7 @@ namespace TheMovies.Tests
 
             viewModel.SelectedScreening = screening;
             viewModel.TicketCount = "11";
+            viewModel.CustomerName = "Test Kunde";
 
             bool canSave = viewModel.SaveCommand.CanExecute(null);
 
@@ -71,6 +94,7 @@ namespace TheMovies.Tests
 
             viewModel.SelectedScreening = screening;
             viewModel.TicketCount = "1";
+            viewModel.CustomerName = "Test Kunde";
 
             bool canSave = viewModel.SaveCommand.CanExecute(null);
 
@@ -78,7 +102,7 @@ namespace TheMovies.Tests
         }
 
         [TestMethod]
-        public void CanSave_ReturnsTrue_WhenTicketCountIsWithinCapacity()
+        public void CanSave_ReturnsTrue_WhenTicketCountIsWithinCapacityAndCustomerNameIsSet()
         {
             var mainWindowViewModel = new MainWindowViewModel();
             var (viewModel, _, _, _, _) = CreateViewModel(mainWindowViewModel);
@@ -91,6 +115,7 @@ namespace TheMovies.Tests
 
             viewModel.SelectedScreening = screening;
             viewModel.TicketCount = "5";
+            viewModel.CustomerName = "Test Kunde";
 
             bool canSave = viewModel.SaveCommand.CanExecute(null);
 
@@ -111,6 +136,7 @@ namespace TheMovies.Tests
 
             viewModel.SelectedScreening = screening;
             viewModel.TicketCount = "4";
+            viewModel.CustomerName = "Test Kunde";
             viewModel.SaveCommand.Execute(null);
 
             Assert.AreEqual(6, viewModel.AvailableSeats);
