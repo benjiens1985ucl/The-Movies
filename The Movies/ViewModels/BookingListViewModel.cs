@@ -153,7 +153,7 @@ namespace The_Movies.ViewModels
             if (SelectedBooking == null)
             {
                 MessageBox.Show(
-                    "Vaelg den booking du oensker at redigere.",
+                    "Vælg den booking du ønsker at redigere.",
                     "Ingen booking valgt.",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -172,7 +172,7 @@ namespace The_Movies.ViewModels
             if (SelectedBooking == null)
             {
                 MessageBox.Show(
-                    "Vaelg den booking du oensker at slette.",
+                    "Vælg den booking du ønsker at slette.",
                     "Ingen booking valgt.",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -181,7 +181,7 @@ namespace The_Movies.ViewModels
             }
 
             var result = MessageBox.Show(
-                $"Er du sikker paa, at du vil slette bookingen paa {SelectedBooking.Booking.TicketCount} billet(ter)?",
+                $"Er du sikker på, at du vil slette bookingen på {SelectedBooking.Booking.TicketCount} billet(ter)?",
                 "Slet booking",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);

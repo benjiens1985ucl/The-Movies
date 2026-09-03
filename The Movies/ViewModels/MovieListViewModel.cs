@@ -50,7 +50,7 @@ namespace The_Movies.ViewModels
             if (SelectedMovie == null)
             {
                 MessageBox.Show(
-                    "Vaelg en film, du vil redigere.",
+                    "Vælg en film, du vil redigere.",
                     "Ingen film valgt.",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -70,7 +70,7 @@ namespace The_Movies.ViewModels
             if (SelectedMovie == null)
             {
                 MessageBox.Show(
-                    "Vaelg den film du oensker at slette.",
+                    "Vælg den film du ønsker at slette.",
                     "Ingen film valgt.",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -90,7 +90,7 @@ namespace The_Movies.ViewModels
             }
 
             var result = MessageBox.Show(
-                $"Er du sikker paa, at du vil slette \"{SelectedMovie.Title}\"?",
+                $"Er du sikker på, at du vil slette \"{SelectedMovie.Title}\"?",
                 "Slet film",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);

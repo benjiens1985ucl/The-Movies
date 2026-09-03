@@ -14,6 +14,9 @@
         <TextBlock Text="Dato"/>
         <DatePicker SelectedDate="{Binding SelectedDate}" Margin="0,0,0,10"/>
 
+        <TextBlock Text="Film"/>
+        <ComboBox ItemsSource="{Binding MovieFilters}" SelectedItem="{Binding SelectedMovieFilter}" Margin="0,0,0,10"/>
+
         <TextBlock Text="Visning"/>
         <ComboBox ItemsSource="{Binding Screenings}" SelectedItem="{Binding SelectedScreening}" Margin="0,0,0,10">
             <ComboBox.ItemTemplate>
@@ -36,7 +39,7 @@
         <TextBlock Text="Antal billetter"/>
         <TextBox Text="{Binding TicketCount, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
-        <TextBlock Text="Kundenavn (valgfrit)"/>
+        <TextBlock Text="Kundenavn"/>
         <TextBox Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
         <TextBlock Text="{Binding StatusMessage}" Foreground="Green" HorizontalAlignment="Center" Margin="0,0,0,10" TextWrapping="Wrap"/>

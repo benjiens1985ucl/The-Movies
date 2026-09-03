@@ -19,6 +19,7 @@ namespace The_Movies.ViewModels
         private List<Screening> _allScreenings = new List<Screening>();
 
         public ObservableCollection<Cinema> Cinemas { get; }
+        public ObservableCollection<string> MovieFilters { get; } = new ObservableCollection<string> { "Alle" };
         public ObservableCollection<Screening> Screenings { get; } = new ObservableCollection<Screening>();
 
         private Cinema? _selectedCinema;
@@ -29,6 +30,7 @@ namespace The_Movies.ViewModels
             {
                 if (SetProperty(ref _selectedCinema, value))
                 {
+                    UpdateMovieFilters();
                     UpdateScreenings();
                 }
             }
@@ -41,6 +43,20 @@ namespace The_Movies.ViewModels
             set
             {
                 if (SetProperty(ref _selectedDate, value))
+                {
+                    UpdateMovieFilters();
+                    UpdateScreenings();
+                }
+            }
+        }
+
+        private string _selectedMovieFilter = "Alle";
+        public string SelectedMovieFilter
+        {
+            get => _selectedMovieFilter;
+            set
+            {
+                if (SetProperty(ref _selectedMovieFilter, value))
                 {
                     UpdateScreenings();
                 }
@@ -112,14 +128,12 @@ namespace The_Movies.ViewModels
             SaveCommand = new RelayCommand(_ => Save(), CanSave);
             BackCommand = new RelayCommand(_ => Back());
 
+            UpdateMovieFilters();
             UpdateScreenings();
         }
 
-        private void UpdateScreenings()
+        private IEnumerable<Screening> FilterByCinemaAndDate()
         {
-            Screenings.Clear();
-            SelectedScreening = null;
-
             var filtered = _allScreenings.AsEnumerable();
 
             if (SelectedCinema != null)
@@ -130,6 +144,36 @@ namespace The_Movies.ViewModels
             if (SelectedDate != null)
             {
                 filtered = filtered.Where(s => s.DateTime.Date == SelectedDate.Value.Date);
+            }
+
+            return filtered;
+        }
+
+        private void UpdateMovieFilters()
+        {
+            string previousSelection = SelectedMovieFilter;
+
+            MovieFilters.Clear();
+            MovieFilters.Add("Alle");
+
+            foreach (var title in FilterByCinemaAndDate().Select(s => s.Movie.Title).Distinct().OrderBy(t => t))
+            {
+                MovieFilters.Add(title);
+            }
+
+            SelectedMovieFilter = MovieFilters.Contains(previousSelection) ? previousSelection : "Alle";
+        }
+
+        private void UpdateScreenings()
+        {
+            Screenings.Clear();
+            SelectedScreening = null;
+
+            var filtered = FilterByCinemaAndDate();
+
+            if (SelectedMovieFilter != "Alle")
+            {
+                filtered = filtered.Where(s => s.Movie.Title == SelectedMovieFilter);
             }
 
             foreach (var screening in filtered.OrderBy(s => s.DateTime))
@@ -153,6 +197,7 @@ namespace The_Movies.ViewModels
         private bool CanSave(object? parameter)
         {
             return SelectedScreening != null
+                && !string.IsNullOrWhiteSpace(CustomerName)
                 && int.TryParse(TicketCount, out int count)
                 && count > 0
                 && count <= AvailableSeats;
